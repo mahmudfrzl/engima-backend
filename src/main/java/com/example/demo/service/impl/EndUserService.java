@@ -52,11 +52,11 @@ public class EndUserService {
     public String getJwtToken(LoginDto loginDto) {
         EndUser user = repository.getEndUserByUsername(loginDto.getUsername())
                 .orElseThrow(() ->new BadRequestAlertException("This user doesn't exist", "userService", "not.found"));
-        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
+        final var authenticationToken = new UsernamePasswordAuthenticationToken(
                 loginDto.getUsername(),
                 loginDto.getPassword()
         );
-        Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
+        final var authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
         SecurityContextHolder.getContext().setAuthentication(authentication);
         return tokenProvider.createToken(authentication, false, user.getId());
     }
